@@ -1,0 +1,16 @@
+/ {
+    aliases {
+        ir-pwm = &pwm0; // 使用 PWM0 实例
+        ir-rx = &button0; // 复用开发板上的 button0 作为接收引脚 (P0.11)
+    };
+};
+
+// 配置 PWM0
+&pwm0 {
+    status = "okay";
+    pinctrl-0 = <&pwm0_default>;
+    pinctrl-1 = <&pwm0_sleep>;
+    pinctrl-names = "default", "sleep";
+};
+
+// 注意：你需要确保 pinctrl 中定义的引脚是你连接红外发射管的引脚
