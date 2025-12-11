@@ -1,0 +1,60 @@
+#pragma once
+
+#include <zephyr/kernel.h>
+#include <zephyr/device.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/sys/printk.h>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+
+// 类型定义
+typedef uint8_t byte;
+typedef bool boolean;
+#define PROGMEM
+#define PGM_P const char *
+
+// 常量
+#define LOW 0
+#define HIGH 1
+#define INPUT GPIO_INPUT
+#define OUTPUT GPIO_OUTPUT
+#define INPUT_PULLUP (GPIO_INPUT | GPIO_PULL_UP)
+
+// 时间函数映射
+static inline uint32_t micros() {
+    return k_cyc_to_us_floor32(k_cycle_get_32());
+}
+
+static inline uint32_t millis() {
+    return k_uptime_get_32();
+}
+
+static inline void delayMicroseconds(uint32_t us) {
+    k_busy_wait(us);
+}
+
+static inline void delay(uint32_t ms) {
+    k_sleep(K_MSEC(ms));
+}
+
+// 内存操作（ARM 统一编址，无需特殊处理 PGM）
+#define memcpy_P memcpy
+#define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+#define pgm_read_word(addr) (*(const unsigned short *)(addr))
+#define pgm_read_dword(addr) (*(const unsigned long *)(addr))
+
+// 串口打印模拟 (调试用)
+class SerialMock {
+public:
+    void begin(int baud) {}
+    void print(const char *s) { printk("%s", s); }
+    void print(int n) { printk("%d", n); }
+    void println(const char *s) { printk("%s\n", s); }
+    void println(int n) { printk("%d\n", n); }
+};
+extern SerialMock Serial;
+
+// 占位函数，具体实现放在 cpp 中或通过宏处理
+void pinMode(int pin, int mode);
+void digitalWrite(int pin, int val);
