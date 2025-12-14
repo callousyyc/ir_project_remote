@@ -15,7 +15,7 @@ int main(void) {
   printk("Starting IR Remote for nRF52840...\n");
 
   // 初始化
-  irsend.begin();
+  //   irsend.begin();
   ac.begin();
 
   // 设置空调参数

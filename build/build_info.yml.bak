@@ -1,6 +1,22 @@
+cmake:
+  board:
+    name: nrf52840dk
+    path:
+     - C:/ncs/v3.0.2/zephyr/boards/nordic/nrf52840dk
+    qualifiers: nrf52840
+    revision: 
+  images:
+   - name: ir_project_remote
+     source-dir: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote
+     type: MAIN
+  kconfig:
+    files:
+     - E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/empty.conf
+     - E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/empty.conf
+    user-files:
+     - E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/empty.conf
+version: 0.1.0
 west:
-  command: C:\ncs\toolchains\0b393f9e1b\opt\bin\Scripts\west build --build-dir e:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build
-    e:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote --pristine --board
-    nrf52840dk/nrf52840 --no-sysbuild -- -DDTC_OVERLAY_FILE=board/nrf52840dk_nrf52840.overlay
+  command: C:\ncs\toolchains\0b393f9e1b\opt\bin\Scripts\west build --build-dir e:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build e:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote --pristine --board nrf52840dk/nrf52840 -- -DCONFIG_DEBUG_OPTIMIZATIONS=y -DCONFIG_DEBUG_THREAD_INFO=y -DDTC_OVERLAY_FILE=board/nrf52840dk_nrf52840.overlay
   topdir: c:\ncs\v3.0.2
   version: 1.2.0

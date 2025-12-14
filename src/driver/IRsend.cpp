@@ -53,6 +53,7 @@ void IRsend::begin() {
     printk("Error: PWM device not ready\n");
     return;
   }
+
   // 初始状态：关闭 PWM
   pwm_set_cycles(pwm_dev, PWM_CHANNEL, 1000, 0, 0);
 }
@@ -75,7 +76,7 @@ void IRsend::mark(uint16_t timeMicroseconds) {
   // 更简单的做法是读取库中的 output_kHz 变量（如果有）或者直接计算
   // 原库通常使用 periodTime = (1000000 / frequency)
 
-  uint32_t frequency = ir_send_frequency * 1000;
+  uint32_t frequency = ir_send_frequency;
   uint32_t period_ns = 1000000000 / frequency;
   uint32_t pulse_ns =
       period_ns * ir_send_duty_cycle / 100; // 1/3 占空比 (标准红外)
@@ -91,7 +92,8 @@ void IRsend::mark(uint16_t timeMicroseconds) {
 // 核心功能：关闭载波 (Space)
 void IRsend::space(uint32_t timeMicroseconds) {
   // 关闭 PWM (占空比设为 0)
-  pwm_set(pwm_dev, PWM_CHANNEL, 1000000000 / 38000, 0, PWM_POLARITY_NORMAL);
+  pwm_set(pwm_dev, PWM_CHANNEL, 1000000000 / ir_send_frequency, 0,
+          PWM_POLARITY_NORMAL);
 
   k_busy_wait(timeMicroseconds);
 }

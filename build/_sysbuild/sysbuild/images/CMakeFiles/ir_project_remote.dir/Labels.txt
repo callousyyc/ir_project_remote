@@ -1,0 +1,13 @@
+# Target labels
+ ir_project_remote
+# Source files and their labels
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/CMakeFiles/ir_project_remote
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/CMakeFiles/ir_project_remote.rule
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/CMakeFiles/ir_project_remote-complete.rule
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-build.rule
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-configure.rule
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-download.rule
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-install.rule
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-mkdir.rule
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-patch.rule
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-update.rule
