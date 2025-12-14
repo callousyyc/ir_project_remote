@@ -4,7 +4,8 @@
 /// Midea added by crankyoldgit & bwze.
 /// send: bwze/crankyoldgit, decode: crankyoldgit
 /// @note SwingV has the function of an Ion Filter on Danby A/C units.
-/// @see https://docs.google.com/spreadsheets/d/1TZh4jWrx4h9zzpYUI9aYXMl1fYOiqu-xVuOOMqagxrs/edit?usp=sharing
+/// @see
+/// https://docs.google.com/spreadsheets/d/1TZh4jWrx4h9zzpYUI9aYXMl1fYOiqu-xVuOOMqagxrs/edit?usp=sharing
 /// @see https://github.com/crankyoldgit/IRremoteESP8266/pull/1213
 
 #include "ir_Midea.h"
@@ -33,8 +34,8 @@ const uint16_t kMideaHdrSpace = kMideaHdrSpaceTicks * kMideaTick;
 const uint16_t kMideaMinGapTicks =
     kMideaHdrMarkTicks + kMideaZeroSpaceTicks + kMideaBitMarkTicks;
 const uint16_t kMideaMinGap = kMideaMinGapTicks * kMideaTick;
-const uint8_t kMideaTolerance = 30;  // Percent
-const uint16_t kMidea24MinGap = 13000;  ///< uSecs
+const uint8_t kMideaTolerance = 30;    // Percent
+const uint16_t kMidea24MinGap = 13000; ///< uSecs
 
 using irutils::addBoolToString;
 using irutils::addFanToString;
@@ -52,7 +53,8 @@ using irutils::minsToString;
 /// @param[in] nbits The number of bits of message to be sent.
 /// @param[in] repeat The number of times the command is to be repeated.
 void IRsend::sendMidea(uint64_t data, uint16_t nbits, uint16_t repeat) {
-  if (nbits % 8 != 0) return;  // nbits is required to be a multiple of 8.
+  if (nbits % 8 != 0)
+    return; // nbits is required to be a multiple of 8.
 
   // Set IR carrier frequency
   enableIROut(38);
@@ -75,7 +77,7 @@ void IRsend::sendMidea(uint64_t data, uint16_t nbits, uint16_t repeat) {
       }
       // Footer
       mark(kMideaBitMark);
-      space(kMideaMinGap);  // Pause before repeating
+      space(kMideaMinGap); // Pause before repeating
 
       // Invert the data for the 2nd phase of the message.
       // As we get called twice in the inner loop, we will always revert
@@ -85,7 +87,7 @@ void IRsend::sendMidea(uint64_t data, uint16_t nbits, uint16_t repeat) {
     space(kDefaultMessageGap);
   }
 }
-#endif  // SEND_MIDEA
+#endif // SEND_MIDEA
 
 // Code to emulate Midea A/C IR remote control unit.
 
@@ -95,7 +97,9 @@ void IRsend::sendMidea(uint64_t data, uint16_t nbits, uint16_t repeat) {
 /// @param[in] use_modulation Is frequency modulation to be used?
 IRMideaAC::IRMideaAC(const uint16_t pin, const bool inverted,
                      const bool use_modulation)
-    : _irsend(pin, inverted, use_modulation) { this->stateReset(); }
+    : _irsend(pin, inverted, use_modulation) {
+  this->stateReset();
+}
 
 /// Reset the state of the remote to a known good state/sequence.
 void IRMideaAC::stateReset(void) {
@@ -110,7 +114,7 @@ void IRMideaAC::stateReset(void) {
   _TurboToggle = false;
 #if KAYSUN_AC
   _SwingVStep = false;
-#endif  // KAYSUN_AC
+#endif // KAYSUN_AC
 }
 
 /// Set up hardware to be able to send a message.
@@ -129,7 +133,7 @@ void IRMideaAC::send(const uint16_t repeat) {
   if (_SwingVStep && !isSwingVStep())
     _irsend.sendMidea(kMideaACSwingVStep, kMideaBits, repeat);
   _SwingVStep = false;
-#endif  // KAYSUN_AC
+#endif // KAYSUN_AC
   if (_EconoToggle && !isEconoToggle())
     _irsend.sendMidea(kMideaACToggleEcono, kMideaBits, repeat);
   _EconoToggle = false;
@@ -139,26 +143,26 @@ void IRMideaAC::send(const uint16_t repeat) {
   if (_LightToggle && !isLightToggle())
     _irsend.sendMidea(kMideaACToggleLight, kMideaBits, repeat);
   _LightToggle = false;
-  if (getMode() <= kMideaACAuto) {  // Only available in Cool, Dry, or Auto mode
+  if (getMode() <= kMideaACAuto) { // Only available in Cool, Dry, or Auto mode
     if (_CleanToggle && !isCleanToggle())
       _irsend.sendMidea(kMideaACToggleSelfClean, kMideaBits, repeat);
     _CleanToggle = false;
-  } else if (getMode() == kMideaACHeat) {  // Only available in Heat mode
+  } else if (getMode() == kMideaACHeat) { // Only available in Heat mode
     if (_8CHeatToggle && !is8CHeatToggle())
       _irsend.sendMidea(kMideaACToggle8CHeat, kMideaBits, repeat);
     _8CHeatToggle = false;
   }
   if (_Quiet != _Quiet_prev)
-    _irsend.sendMidea(_Quiet ? kMideaACQuietOn : kMideaACQuietOff,
-                      kMideaBits, repeat);
+    _irsend.sendMidea(_Quiet ? kMideaACQuietOn : kMideaACQuietOff, kMideaBits,
+                      repeat);
   _Quiet_prev = _Quiet;
 }
-#endif  // SEND_MIDEA
+#endif // SEND_MIDEA
 
 /// Get a copy of the internal state/code for this protocol.
 /// @return The code for this protocol based on the current internal state.
 uint64_t IRMideaAC::getRaw(void) {
-  checksum();  // Ensure correct checksum before sending.
+  checksum(); // Ensure correct checksum before sending.
   return _.remote_state;
 }
 
@@ -174,29 +178,23 @@ void IRMideaAC::off(void) { setPower(false); }
 
 /// Change the power setting.
 /// @param[in] on true, the setting is on. false, the setting is off.
-void IRMideaAC::setPower(const bool on) {
-  _.Power = on;
-}
+void IRMideaAC::setPower(const bool on) { _.Power = on; }
 
 /// Get the value of the current power setting.
 /// @return true, the setting is on. false, the setting is off.
-bool IRMideaAC::getPower(void) const {
-  return _.Power;
-}
+bool IRMideaAC::getPower(void) const { return _.Power; }
 
 /// Is the device currently using Celsius or the Fahrenheit temp scale?
 /// @return true, the A/C unit uses Celsius natively, false, is Fahrenheit.
-bool IRMideaAC::getUseCelsius(void) const {
-  return !_.useFahrenheit;
-}
+bool IRMideaAC::getUseCelsius(void) const { return !_.useFahrenheit; }
 
 /// Set the A/C unit to use Celsius natively.
 /// @param[in] on true, the setting is on. false, the setting is off.
 void IRMideaAC::setUseCelsius(const bool on) {
-  if (on == _.useFahrenheit) {  // We need to change.
-    uint8_t native_temp = getTemp(!on);  // Get the old native temp.
-    _.useFahrenheit = !on;  // Cleared is on.
-    setTemp(native_temp, !on);  // Reset temp using the old native temp.
+  if (on == _.useFahrenheit) {          // We need to change.
+    uint8_t native_temp = getTemp(!on); // Get the old native temp.
+    _.useFahrenheit = !on;              // Cleared is on.
+    setTemp(native_temp, !on);          // Reset temp using the old native temp.
   }
 }
 
@@ -211,11 +209,11 @@ void IRMideaAC::setTemp(const uint8_t temp, const bool useCelsius) {
     min_temp = kMideaACMinTempC;
   }
   uint8_t new_temp = std::min(max_temp, std::max(min_temp, temp));
-  if (!_.useFahrenheit && !useCelsius)  // Native is in C, new_temp is in F
+  if (!_.useFahrenheit && !useCelsius) // Native is in C, new_temp is in F
     new_temp = fahrenheitToCelsius(new_temp) - kMideaACMinTempC;
-  else if (_.useFahrenheit && useCelsius)  // Native is in F, new_temp is in C
+  else if (_.useFahrenheit && useCelsius) // Native is in F, new_temp is in C
     new_temp = celsiusToFahrenheit(new_temp) - kMideaACMinTempF;
-  else  // Native and desired are the same units.
+  else // Native and desired are the same units.
     new_temp -= min_temp;
   // Set the actual data.
   _.Temp = new_temp;
@@ -230,8 +228,10 @@ uint8_t IRMideaAC::getTemp(const bool celsius) const {
     temp += kMideaACMinTempC;
   else
     temp += kMideaACMinTempF;
-  if (celsius && _.useFahrenheit) temp = fahrenheitToCelsius(temp) + 0.5;
-  if (!celsius && !_.useFahrenheit) temp = celsiusToFahrenheit(temp);
+  if (celsius && _.useFahrenheit)
+    temp = fahrenheitToCelsius(temp) + 0.5;
+  if (!celsius && !_.useFahrenheit)
+    temp = celsiusToFahrenheit(temp);
   return temp;
 }
 
@@ -247,11 +247,11 @@ void IRMideaAC::setSensorTemp(const uint8_t temp, const bool useCelsius) {
     min_temp = kMideaACMinSensorTempC;
   }
   uint8_t new_temp = std::min(max_temp, std::max(min_temp, temp));
-  if (!_.useFahrenheit && !useCelsius)  // Native is in C, new_temp is in F
+  if (!_.useFahrenheit && !useCelsius) // Native is in C, new_temp is in F
     new_temp = fahrenheitToCelsius(new_temp) - kMideaACMinSensorTempC;
-  else if (_.useFahrenheit && useCelsius)  // Native is in F, new_temp is in C
+  else if (_.useFahrenheit && useCelsius) // Native is in F, new_temp is in C
     new_temp = celsiusToFahrenheit(new_temp) - kMideaACMinSensorTempF;
-  else  // Native and desired are the same units.
+  else // Native and desired are the same units.
     new_temp -= min_temp;
   // Set the actual data.
   _.SensorTemp = new_temp + 1;
@@ -268,8 +268,10 @@ uint8_t IRMideaAC::getSensorTemp(const bool celsius) const {
     temp += kMideaACMinSensorTempC;
   else
     temp += kMideaACMinSensorTempF;
-  if (celsius && _.useFahrenheit) temp = fahrenheitToCelsius(temp) + 0.5;
-  if (!celsius && !_.useFahrenheit) temp = celsiusToFahrenheit(temp);
+  if (celsius && _.useFahrenheit)
+    temp = fahrenheitToCelsius(temp) + 0.5;
+  if (!celsius && !_.useFahrenheit)
+    temp = celsiusToFahrenheit(temp);
   return temp;
 }
 
@@ -282,7 +284,7 @@ void IRMideaAC::setEnableSensorTemp(const bool on) {
     setType(kMideaACTypeFollow);
   } else {
     setType(kMideaACTypeCommand);
-    _.SensorTemp = kMideaACSensorTempOnTimerOff;  // Apply special value if off.
+    _.SensorTemp = kMideaACSensorTempOnTimerOff; // Apply special value if off.
   }
 }
 
@@ -299,43 +301,35 @@ void IRMideaAC::setFan(const uint8_t fan) {
 
 /// Get the current fan speed setting.
 /// @return The current fan speed.
-uint8_t IRMideaAC::getFan(void) const {
-  return _.Fan;
-}
+uint8_t IRMideaAC::getFan(void) const { return _.Fan; }
 
 /// Get the operating mode setting of the A/C.
 /// @return The current operating mode setting.
-uint8_t IRMideaAC::getMode(void) const {
-  return _.Mode;
-}
+uint8_t IRMideaAC::getMode(void) const { return _.Mode; }
 
 /// Set the operating mode of the A/C.
 /// @param[in] mode The desired operating mode.
 void IRMideaAC::setMode(const uint8_t mode) {
   switch (mode) {
-    case kMideaACAuto:
-    case kMideaACCool:
-    case kMideaACHeat:
-    case kMideaACDry:
-    case kMideaACFan:
-      _.Mode = mode;
-      break;
-    default:
-      _.Mode = kMideaACAuto;
+  case kMideaACAuto:
+  case kMideaACCool:
+  case kMideaACHeat:
+  case kMideaACDry:
+  case kMideaACFan:
+    _.Mode = mode;
+    break;
+  default:
+    _.Mode = kMideaACAuto;
   }
 }
 
 /// Set the Sleep setting of the A/C.
 /// @param[in] on true, the setting is on. false, the setting is off.
-void IRMideaAC::setSleep(const bool on) {
-  _.Sleep = on;
-}
+void IRMideaAC::setSleep(const bool on) { _.Sleep = on; }
 
 /// Get the Sleep setting of the A/C.
 /// @return true, the setting is on. false, the setting is off.
-bool IRMideaAC::getSleep(void) const {
-  return _.Sleep;
-}
+bool IRMideaAC::getSleep(void) const { return _.Sleep; }
 
 /// Set the A/C to toggle the vertical swing toggle for the next send.
 /// @note On Danby A/C units, this is associated with the Ion Filter instead.
@@ -374,7 +368,7 @@ bool IRMideaAC::getSwingVStep(void) {
   _SwingVStep |= isSwingVStep();
   return _SwingVStep;
 }
-#endif  // KAYSUN_AC
+#endif // KAYSUN_AC
 
 /// Set the A/C to toggle the Econo (energy saver) mode for the next send.
 /// @param[in] on true, the setting is on. false, the setting is off.
@@ -532,15 +526,15 @@ uint8_t IRMideaAC::getType(void) const { return _.Type; }
 /// @param[in] setting The desired message type setting.
 void IRMideaAC::setType(const uint8_t setting) {
   switch (setting) {
-    case kMideaACTypeFollow:
-      _.BeepDisable = false;
-     // FALL-THRU
-    case kMideaACTypeSpecial:
-      _.Type = setting;
-      break;
-    default:
-      _.Type = kMideaACTypeCommand;
-      _.BeepDisable = true;
+  case kMideaACTypeFollow:
+    _.BeepDisable = false;
+    // FALL-THRU
+  case kMideaACTypeSpecial:
+    _.Type = setting;
+    break;
+  default:
+    _.Type = kMideaACTypeCommand;
+    _.BeepDisable = true;
   }
 }
 
@@ -548,7 +542,7 @@ void IRMideaAC::setType(const uint8_t setting) {
 /// @return true for yes, false for no.
 bool IRMideaAC::isOnTimerEnabled(void) const {
   return getType() == kMideaACTypeCommand &&
-      _.SensorTemp != kMideaACSensorTempOnTimerOff;
+         _.SensorTemp != kMideaACSensorTempOnTimerOff;
 }
 
 /// Get the value of the OnTimer is currently set to.
@@ -601,11 +595,16 @@ void IRMideaAC::setOffTimer(const uint16_t mins) {
 /// @return The native equivalent of the enum.
 uint8_t IRMideaAC::convertMode(const stdAc::opmode_t mode) {
   switch (mode) {
-    case stdAc::opmode_t::kCool: return kMideaACCool;
-    case stdAc::opmode_t::kHeat: return kMideaACHeat;
-    case stdAc::opmode_t::kDry:  return kMideaACDry;
-    case stdAc::opmode_t::kFan:  return kMideaACFan;
-    default:                     return kMideaACAuto;
+  case stdAc::opmode_t::kCool:
+    return kMideaACCool;
+  case stdAc::opmode_t::kHeat:
+    return kMideaACHeat;
+  case stdAc::opmode_t::kDry:
+    return kMideaACDry;
+  case stdAc::opmode_t::kFan:
+    return kMideaACFan;
+  default:
+    return kMideaACAuto;
   }
 }
 
@@ -614,12 +613,16 @@ uint8_t IRMideaAC::convertMode(const stdAc::opmode_t mode) {
 /// @return The native equivalent of the enum.
 uint8_t IRMideaAC::convertFan(const stdAc::fanspeed_t speed) {
   switch (speed) {
-    case stdAc::fanspeed_t::kMin:
-    case stdAc::fanspeed_t::kLow:    return kMideaACFanLow;
-    case stdAc::fanspeed_t::kMedium: return kMideaACFanMed;
-    case stdAc::fanspeed_t::kHigh:
-    case stdAc::fanspeed_t::kMax:    return kMideaACFanHigh;
-    default:                         return kMideaACFanAuto;
+  case stdAc::fanspeed_t::kMin:
+  case stdAc::fanspeed_t::kLow:
+    return kMideaACFanLow;
+  case stdAc::fanspeed_t::kMedium:
+    return kMideaACFanMed;
+  case stdAc::fanspeed_t::kHigh:
+  case stdAc::fanspeed_t::kMax:
+    return kMideaACFanHigh;
+  default:
+    return kMideaACFanAuto;
   }
 }
 
@@ -628,11 +631,16 @@ uint8_t IRMideaAC::convertFan(const stdAc::fanspeed_t speed) {
 /// @return The stdAc equivalent of the native setting.
 stdAc::opmode_t IRMideaAC::toCommonMode(const uint8_t mode) {
   switch (mode) {
-    case kMideaACCool: return stdAc::opmode_t::kCool;
-    case kMideaACHeat: return stdAc::opmode_t::kHeat;
-    case kMideaACDry:  return stdAc::opmode_t::kDry;
-    case kMideaACFan:  return stdAc::opmode_t::kFan;
-    default:           return stdAc::opmode_t::kAuto;
+  case kMideaACCool:
+    return stdAc::opmode_t::kCool;
+  case kMideaACHeat:
+    return stdAc::opmode_t::kHeat;
+  case kMideaACDry:
+    return stdAc::opmode_t::kDry;
+  case kMideaACFan:
+    return stdAc::opmode_t::kFan;
+  default:
+    return stdAc::opmode_t::kAuto;
   }
 }
 
@@ -641,10 +649,14 @@ stdAc::opmode_t IRMideaAC::toCommonMode(const uint8_t mode) {
 /// @return The stdAc equivalent of the native setting.
 stdAc::fanspeed_t IRMideaAC::toCommonFanSpeed(const uint8_t speed) {
   switch (speed) {
-    case kMideaACFanHigh: return stdAc::fanspeed_t::kMax;
-    case kMideaACFanMed:  return stdAc::fanspeed_t::kMedium;
-    case kMideaACFanLow:  return stdAc::fanspeed_t::kMin;
-    default:              return stdAc::fanspeed_t::kAuto;
+  case kMideaACFanHigh:
+    return stdAc::fanspeed_t::kMax;
+  case kMideaACFanMed:
+    return stdAc::fanspeed_t::kMedium;
+  case kMideaACFanLow:
+    return stdAc::fanspeed_t::kMin;
+  default:
+    return stdAc::fanspeed_t::kAuto;
   }
 }
 
@@ -658,7 +670,7 @@ stdAc::state_t IRMideaAC::toCommon(const stdAc::state_t *prev) {
   } else {
     // Fixed/Not supported/Non-zero defaults.
     result.protocol = decode_type_t::MIDEA;
-    result.model = -1;  // No models used.
+    result.model = -1; // No models used.
     result.swingh = stdAc::swingh_t::kOff;
     result.swingv = stdAc::swingv_t::kOff;
     result.quiet = false;
@@ -671,8 +683,9 @@ stdAc::state_t IRMideaAC::toCommon(const stdAc::state_t *prev) {
     result.clock = -1;
   }
   if (isSwingVToggle()) {
-    result.swingv = (result.swingv != stdAc::swingv_t::kOff) ?
-        stdAc::swingv_t::kAuto : stdAc::swingv_t::kOff;
+    result.swingv = (result.swingv != stdAc::swingv_t::kOff)
+                        ? stdAc::swingv_t::kAuto
+                        : stdAc::swingv_t::kOff;
     return result;
   }
   result.power = _.Power;
@@ -687,25 +700,33 @@ stdAc::state_t IRMideaAC::toCommon(const stdAc::state_t *prev) {
   return result;
 }
 
+#if 1
 /// Convert the current internal state into a human readable string.
 /// @return A human readable string.
 String IRMideaAC::toString(void) {
   String result = "";
   const uint8_t message_type = getType();
-  result.reserve(230);  // Reserve some heap for the string to reduce fragging.
+  result.reserve(230); // Reserve some heap for the string to reduce fragging.
   result += addIntToString(message_type, kTypeStr, false);
   result += kSpaceLBraceStr;
   switch (message_type) {
-    case kMideaACTypeCommand: result += kCommandStr; break;
-    case kMideaACTypeSpecial: result += kSpecialStr; break;
-    case kMideaACTypeFollow:  result += kFollowStr; break;
-    default:                  result += kUnknownStr;
+  case kMideaACTypeCommand:
+    result += kCommandStr;
+    break;
+  case kMideaACTypeSpecial:
+    result += kSpecialStr;
+    break;
+  case kMideaACTypeFollow:
+    result += kFollowStr;
+    break;
+  default:
+    result += kUnknownStr;
   }
   result += ')';
   if (message_type != kMideaACTypeSpecial) {
     result += addBoolToString(_.Power, kPowerStr);
-    result += addModeToString(_.Mode, kMideaACAuto, kMideaACCool,
-                              kMideaACHeat, kMideaACDry, kMideaACFan);
+    result += addModeToString(_.Mode, kMideaACAuto, kMideaACCool, kMideaACHeat,
+                              kMideaACDry, kMideaACFan);
     result += addBoolToString(!_.useFahrenheit, kCelsiusStr);
     result += addTempToString(getTemp(true));
     result += '/';
@@ -719,13 +740,13 @@ String IRMideaAC::toString(void) {
       result += uint64ToString(getSensorTemp(false));
       result += 'F';
     } else {
-      result += addLabeledString(
-          isOnTimerEnabled() ? minsToString(getOnTimer()) : kOffStr,
-          kOnTimerStr);
+      result += addLabeledString(isOnTimerEnabled() ? minsToString(getOnTimer())
+                                                    : kOffStr,
+                                 kOnTimerStr);
     }
-    result += addLabeledString(
-        isOffTimerEnabled() ? minsToString(getOffTimer()) : kOffStr,
-        kOffTimerStr);
+    result += addLabeledString(isOffTimerEnabled() ? minsToString(getOffTimer())
+                                                   : kOffStr,
+                               kOffTimerStr);
     result += addFanToString(_.Fan, kMideaACFanHigh, kMideaACFanLow,
                              kMideaACFanAuto, kMideaACFanAuto, kMideaACFanMed);
     result += addBoolToString(_.Sleep, kSleepStr);
@@ -733,7 +754,7 @@ String IRMideaAC::toString(void) {
   result += addToggleToString(getSwingVToggle(), kSwingVStr);
 #if KAYSUN_AC
   result += addBoolToString(getSwingVStep(), kStepStr);
-#endif  // KAYSUN_AC
+#endif // KAYSUN_AC
   result += addToggleToString(getEconoToggle(), kEconoStr);
   result += addToggleToString(getTurboToggle(), kTurboStr);
   result += addBoolToString(getQuiet(), kQuietStr);
@@ -742,6 +763,7 @@ String IRMideaAC::toString(void) {
   result += addToggleToString(get8CHeatToggle(), k8CHeatStr);
   return result;
 }
+#endif // 0
 
 #if DECODE_MIDEA
 /// Decode the supplied Midea message.
@@ -757,7 +779,8 @@ bool IRrecv::decodeMidea(decode_results *results, uint16_t offset,
                          const uint16_t nbits, const bool strict) {
   uint8_t min_nr_of_messages = 1;
   if (strict) {
-    if (nbits != kMideaBits) return false;  // Not strictly a MIDEA message.
+    if (nbits != kMideaBits)
+      return false; // Not strictly a MIDEA message.
     min_nr_of_messages = 2;
   }
 
@@ -765,26 +788,26 @@ bool IRrecv::decodeMidea(decode_results *results, uint16_t offset,
   // each byte. Hence twice the number of expected data bits.
   if (results->rawlen <
       min_nr_of_messages * (2 * nbits + kHeader + kFooter) - 1 + offset)
-    return false;  // Can't possibly be a valid MIDEA message.
+    return false; // Can't possibly be a valid MIDEA message.
 
   uint64_t data = 0;
   uint64_t inverted = 0;
 
   if (nbits > sizeof(data) * 8)
-    return false;  // We can't possibly capture a Midea packet that big.
+    return false; // We can't possibly capture a Midea packet that big.
 
   for (uint8_t i = 0; i < min_nr_of_messages; i++) {
     // Match Header + Data + Footer
     uint16_t used;
     used = matchGeneric(results->rawbuf + offset, i % 2 ? &inverted : &data,
-                        results->rawlen - offset, nbits,
-                        kMideaHdrMark, kMideaHdrSpace,
-                        kMideaBitMark, kMideaOneSpace,
-                        kMideaBitMark, kMideaZeroSpace,
-                        kMideaBitMark, kMideaMinGap,
-                        i % 2,  // No "atleast" on 1st part, but yes on the 2nd.
+                        results->rawlen - offset, nbits, kMideaHdrMark,
+                        kMideaHdrSpace, kMideaBitMark, kMideaOneSpace,
+                        kMideaBitMark, kMideaZeroSpace, kMideaBitMark,
+                        kMideaMinGap,
+                        i % 2, // No "atleast" on 1st part, but yes on the 2nd.
                         kMideaTolerance);
-    if (!used) return false;
+    if (!used)
+      return false;
     offset += used;
   }
 
@@ -794,8 +817,10 @@ bool IRrecv::decodeMidea(decode_results *results, uint16_t offset,
     // We should have checked we got a second message in the previous loop.
     // Just need to check it's value is an inverted copy of the first message.
     uint64_t mask = (1ULL << kMideaBits) - 1;
-    if ((data & mask) != ((inverted ^ mask) & mask)) return false;
-    if (!IRMideaAC::validChecksum(data)) return false;
+    if ((data & mask) != ((inverted ^ mask) & mask))
+      return false;
+    if (!IRMideaAC::validChecksum(data))
+      return false;
   }
 
   // Success
@@ -806,7 +831,7 @@ bool IRrecv::decodeMidea(decode_results *results, uint16_t offset,
   results->command = 0;
   return true;
 }
-#endif  // DECODE_MIDEA
+#endif // DECODE_MIDEA
 
 #if SEND_MIDEA24
 /// Send a Midea24 formatted message.
@@ -820,7 +845,7 @@ bool IRrecv::decodeMidea(decode_results *results, uint16_t offset,
 ///   least a single repeat.
 /// @warning Can't be used beyond 32 bits.
 void IRsend::sendMidea24(const uint64_t data, const uint16_t nbits,
-                          const uint16_t repeat) {
+                         const uint16_t repeat) {
   uint64_t newdata = 0;
   // Construct the data into bye & inverted byte pairs.
   for (int16_t i = nbits - 8; i >= 0; i -= 8) {
@@ -831,7 +856,7 @@ void IRsend::sendMidea24(const uint64_t data, const uint16_t nbits,
   }
   sendNEC(newdata, nbits * 2, repeat);
 }
-#endif  // SEND_MIDEA24
+#endif // SEND_MIDEA24
 
 #if DECODE_MIDEA24
 /// Decode the supplied Midea24 message.
@@ -847,18 +872,19 @@ void IRsend::sendMidea24(const uint64_t data, const uint16_t nbits,
 ///   alternate bytes inverted, thus only 24 bits of real data.
 /// @warning Can't be used beyond 32 bits.
 bool IRrecv::decodeMidea24(decode_results *results, uint16_t offset,
-                            const uint16_t nbits, const bool strict) {
+                           const uint16_t nbits, const bool strict) {
   // Not strictly a MIDEA24 message.
-  if (strict && nbits != kMidea24Bits) return false;
-  if (nbits > 32) return false;  // Can't successfully match something that big.
+  if (strict && nbits != kMidea24Bits)
+    return false;
+  if (nbits > 32)
+    return false; // Can't successfully match something that big.
 
   uint64_t longdata = 0;
   if (!matchGeneric(results->rawbuf + offset, &longdata,
-                    results->rawlen - offset, nbits * 2,
-                    kNecHdrMark, kNecHdrSpace,
-                    kNecBitMark, kNecOneSpace,
-                    kNecBitMark, kNecZeroSpace,
-                    kNecBitMark, kMidea24MinGap, true)) return false;
+                    results->rawlen - offset, nbits * 2, kNecHdrMark,
+                    kNecHdrSpace, kNecBitMark, kNecOneSpace, kNecBitMark,
+                    kNecZeroSpace, kNecBitMark, kMidea24MinGap, true))
+    return false;
 
   // Build the result by checking every second byte is a complement(inversion)
   // of the previous one.
@@ -871,7 +897,8 @@ bool IRrecv::decodeMidea24(decode_results *results, uint16_t offset,
     i -= 8;
     uint8_t next = GETBITS64(longdata, i, 8);
     // Check they are an inverted pair.
-    if (current != (next ^ 0xFF)) return false;  // They are not, so abort.
+    if (current != (next ^ 0xFF))
+      return false; // They are not, so abort.
     data |= current;
   }
 
@@ -883,4 +910,4 @@ bool IRrecv::decodeMidea24(decode_results *results, uint16_t offset,
   results->command = 0;
   return true;
 }
-#endif  // DECODE_MIDEA24
+#endif // DECODE_MIDEA24

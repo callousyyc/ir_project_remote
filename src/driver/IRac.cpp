@@ -12,7 +12,7 @@
 #ifndef ARDUINO
 #include <string>
 #endif
-#include <cmath>
+// #include <cmath>
 #include <memory>
 #if __cplusplus >= 201103L && defined(_GLIBCXX_USE_C99_MATH_TR1)
     using std::roundf;

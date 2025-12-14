@@ -1,7 +1,27 @@
+/*
+ * nRF52840 IR设备树配置
+ * 文件名: nrf52840dk_nrf52840.overlay
+ */
+
 / {
     aliases {
         ir-pwm = &pwm0; // 使用 PWM0 实例
-        ir-rx = &button0; // 复用开发板上的 button0 作为接收引脚 (P0.11)
+        // ir-rx = &button0; // 复用开发板上的 button0 作为接收引脚 (P0.11)
+    };
+};
+
+&pinctrl {
+    pwm0_default: pwm0_default {
+        group1 {
+            psels = <NRF_PSEL(PWM_OUT0, 1, 11)>;
+        };
+    };
+
+    pwm0_sleep: pwm0_sleep {
+        group1 {
+            psels = <NRF_PSEL(PWM_OUT0, 1, 11)>;
+            low-power-enable;
+        };
     };
 };
 
@@ -13,4 +33,7 @@
     pinctrl-names = "default", "sleep";
 };
 
+&gpio0 {
+    status = "okay";
+};
 // 注意：你需要确保 pinctrl 中定义的引脚是你连接红外发射管的引脚

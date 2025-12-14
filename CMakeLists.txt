@@ -13,11 +13,13 @@ target_sources(app PRIVATE
     # src/driver/ZephyrIRReceiver.cpp
     # src/driver/ZephyrIRSender.cpp
     src/protocols/ir_Panasonic.cpp
-    src/IRsend.cpp
-    src/IRutils.cpp
-    src/IRrecv.cpp
+    src/driver/IRsend.cpp
+    src/driver/IRutils.cpp
+    # src/driver/IRrecv.cpp
 )
 target_include_directories(app PRIVATE src/shim
     src/driver
     src/protocols
 )
+
+# get_property(TOOLCHAIN_INC GLOBAL PROPERTY TOOLCHAIN_C_STANDARD_INCLUDE_DIRS)
