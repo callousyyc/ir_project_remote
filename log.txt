@@ -1,0 +1,112 @@
+-- west build: generating a build system
+Loading Zephyr module(s) (Zephyr base): sysbuild_default
+-- Found Python3: C:/ncs/toolchains/0b393f9e1b/opt/bin/python.exe (found suitable version "3.12.4", minimum required is "3.10") found components: Interpreter
+-- Cache files will be written to: C:/ncs/v3.0.2/zephyr/.cache
+-- Found west (found suitable version "1.2.0", minimum required is "0.14.0")
+-- Board: nrf52840dk, qualifiers: nrf52840
+Parsing C:/ncs/v3.0.2/zephyr/share/sysbuild/Kconfig
+Loaded configuration 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/empty.conf'
+Merged configuration 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/empty.conf'
+Configuration saved to 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/zephyr/.config'
+Kconfig header saved to 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/autoconf.h'
+--
+   ***************************************
+   * Running CMake for ir_project_remote *
+   ***************************************
+
+Loading Zephyr default modules (Zephyr base).
+-- Application: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote
+-- CMake version: 3.21.0
+-- Found Python3: C:/ncs/toolchains/0b393f9e1b/opt/bin/python.exe (found suitable version "3.12.4", minimum required is "3.10") found components: Interpreter
+-- Cache files will be written to: C:/ncs/v3.0.2/zephyr/.cache
+-- Zephyr version: 4.0.99 (C:/ncs/v3.0.2/zephyr)
+-- Found west (found suitable version "1.2.0", minimum required is "0.14.0")
+-- Board: nrf52840dk, qualifiers: nrf52840
+-- Found host-tools: zephyr 0.17.0 (C:/ncs/toolchains/0b393f9e1b/opt/zephyr-sdk)
+-- Found toolchain: zephyr 0.17.0 (C:/ncs/toolchains/0b393f9e1b/opt/zephyr-sdk)
+-- Found Dtc: C:/ncs/toolchains/0b393f9e1b/opt/bin/dtc.exe (found suitable version "1.4.7", minimum required is "1.4.6")
+-- Found BOARD.dts: C:/ncs/v3.0.2/zephyr/boards/nordic/nrf52840dk/nrf52840dk_nrf52840.dts
+-- Found devicetree overlay: board/nrf52840dk_nrf52840.overlay
+-- Generated zephyr.dts: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/zephyr.dts
+-- Generated pickled edt: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/edt.pickle
+-- Generated zephyr.dts: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/zephyr.dts
+-- Generated devicetree_generated.h: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/include/generated/zephyr/devicetree_generated.h
+-- Including generated dts.cmake file: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/dts.cmake
+Parsing C:/ncs/v3.0.2/zephyr/Kconfig
+Loaded configuration 'C:/ncs/v3.0.2/zephyr/boards/nordic/nrf52840dk/nrf52840dk_nrf52840_defconfig'
+Merged configuration 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/prj.conf'
+Merged configuration 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/misc/generated/extra_kconfig_options.conf'
+Merged configuration 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/.config.sysbuild'
+Configuration saved to 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/.config'
+Kconfig header saved to 'E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/include/generated/zephyr/autoconf.h'
+-- Found GnuLd: c:/ncs/toolchains/0b393f9e1b/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/bin/ld.bfd.exe (found version "2.38")
+-- The C compiler identification is GNU 12.2.0
+-- The CXX compiler identification is GNU 12.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: C:/ncs/toolchains/0b393f9e1b/opt/zephyr-sdk/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc.exe
+-- Configuring done
+-- Generating done
+-- Build files have been written to: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote
+-- Configuring done
+-- Generating done
+-- Build files have been written to: E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build
+?[92m-- west build: building application
+[5/10] Performing build step for 'ir_project_remote'
+[5/172] Generating include/generated/zephyr/version.h
+-- Zephyr version: 4.0.99 (C:/ncs/v3.0.2/zephyr), build: v4.0.99-ncs1-2
+[38/172] Building CXX object CMakeFiles/app.dir/src/driver/IRutils.cpp.obj
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/IRutils.cpp: In function 'float celsiusToFahrenheit(float)':
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/IRutils.cpp:548:58: warning: implicit conversion from 'float' to 'double' to match other operand of binary expression [-Wdoub
+le-promotion]
+  548 | float celsiusToFahrenheit(const float deg) { return (deg * 9.0) / 5.0 + 32.0; }
+      |                                                      ~~~~^~~~~
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/IRutils.cpp: In function 'float fahrenheitToCelsius(float)':
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/IRutils.cpp:551:58: warning: implicit conversion from 'float' to 'double' to match other operand of binary expression [-Wdoub
+le-promotion]
+  551 | float fahrenheitToCelsius(const float deg) { return (deg - 32.0) * 5.0 / 9.0; }
+      |                                                      ~~~~^~~~~~
+[54/172] Building C object CMakeFiles/app.dir/src/driver/ir_hal.c.obj
+FAILED: CMakeFiles/app.dir/src/driver/ir_hal.c.obj
+C:\ncs\toolchains\0b393f9e1b\opt\zephyr-sdk\arm-zephyr-eabi\bin\arm-zephyr-eabi-gcc.exe -DKERNEL -DK_HEAP_MEM_POOL_SIZE=4096 -DNRF52840_XXAA -DPICOLIBC_DOUBLE_PRINTF_SCANF -DUSE_PARTITION_MANAGER=1 -D
+__LINUX_ERRNO_EXTENSIONS__ -D__PROGRAM_START -D__ZEPHYR__=1 -IE:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/shim -IE:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote
+/src/driver -IE:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/protocols -IE:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/include/gen
+erated/zephyr -IC:/ncs/v3.0.2/zephyr/include -IE:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/include/generated -IC:/ncs/v3.0.2/zephyr/soc/nordic -IC:/n
+cs/v3.0.2/zephyr/soc/nordic/nrf52/. -IC:/ncs/v3.0.2/zephyr/soc/nordic/common/. -IC:/ncs/v3.0.2/nrf/include -IC:/ncs/v3.0.2/nrf/tests/include -IC:/ncs/v3.0.2/modules/hal/cmsis/CMSIS/Core/Include -IC:/n
+cs/v3.0.2/zephyr/modules/cmsis/. -IC:/ncs/v3.0.2/nrf/modules/hal_nordic/. -IC:/ncs/v3.0.2/modules/hal/nordic/nrfx -IC:/ncs/v3.0.2/modules/hal/nordic/nrfx/drivers/include -IC:/ncs/v3.0.2/modules/hal/no
+rdic/nrfx/mdk -IC:/ncs/v3.0.2/zephyr/modules/hal_nordic/nrfx/. -IC:/ncs/v3.0.2/modules/debug/segger/SEGGER -IC:/ncs/v3.0.2/modules/debug/segger/Config -isystem C:/ncs/v3.0.2/zephyr/lib/libc/common/inc
+lude -isystem C:/ncs/v3.0.2/nrfxlib/crypto/nrf_cc310_platform/include -fno-strict-aliasing -Og -imacros E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/i
+nclude/generated/zephyr/autoconf.h -fno-common -g -gdwarf-4 -fdiagnostics-color=always -mcpu=cortex-m4 -mthumb -mabi=aapcs -mfp16-format=ieee -mtp=soft --sysroot=C:/ncs/toolchains/0b393f9e1b/opt/zephy
+r-sdk/arm-zephyr-eabi/arm-zephyr-eabi -imacros C:/ncs/v3.0.2/zephyr/include/zephyr/toolchain/zephyr_stdint.h -Wall -Wformat -Wformat-security -Wno-format-zero-length -Wdouble-promotion -Wno-pointer-si
+gn -Wpointer-arith -Wexpansion-to-defined -Wno-unused-but-set-variable -Werror=implicit-int -fno-pic -fno-pie -fno-asynchronous-unwind-tables -ftls-model=local-exec -fno-reorder-functions --param=min-
+pagesize=0 -fno-defer-pop -fmacro-prefix-map=E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote=CMAKE_SOURCE_DIR -fmacro-prefix-map=C:/ncs/v3.0.2/zephyr=ZEPHYR_BASE -fmacro-prefix-map=C:/
+ncs/v3.0.2=WEST_TOPDIR -ffunction-sections -fdata-sections -specs=picolibc.specs -std=c99 -MD -MT CMakeFiles/app.dir/src/driver/ir_hal.c.obj -MF CMakeFiles\app.dir\src\driver\ir_hal.c.obj.d -o CMakeFi
+les/app.dir/src/driver/ir_hal.c.obj -c E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c: In function 'pwm_init':
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c:39:29: error: 'NRFX_PWM_PIN_INVERTED' undeclared (first use in this function)
+   39 |               IR_GPIO_PIN | NRFX_PWM_PIN_INVERTED,
+      |                             ^~~~~~~~~~~~~~~~~~~~~
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c:39:29: note: each undeclared identifier is reported only once for each function it appears in
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c:40:15: error: 'NRFX_PWM_PIN_NOT_USED' undeclared (first use in this function)
+   40 |               NRFX_PWM_PIN_NOT_USED,
+      |               ^~~~~~~~~~~~~~~~~~~~~
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c: In function 'timer_init':
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c:62:29: error: 'NRFX_TIMER_DEFAULT_CONFIG' undeclared (first use in this function)
+   62 |   nrfx_timer_config_t cfg = NRFX_TIMER_DEFAULT_CONFIG;
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c: In function 'ir_set_carrier_freq':
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c:115:29: error: 'NRFX_PWM_PIN_INVERTED' undeclared (first use in this function)
+  115 |               IR_GPIO_PIN | NRFX_PWM_PIN_INVERTED,
+      |                             ^~~~~~~~~~~~~~~~~~~~~
+E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/src/driver/ir_hal.c:116:15: error: 'NRFX_PWM_PIN_NOT_USED' undeclared (first use in this function)
+  116 |               NRFX_PWM_PIN_NOT_USED,
+      |               ^~~~~~~~~~~~~~~~~~~~~
+[75/172] Building C object zephyr/arch/arch/arm/core/CMakeFiles/arch__arm__core.dir/fatal.c.obj
+ninja: build stopped: subcommand failed.
+FAILED: _sysbuild/sysbuild/images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-build E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/_sysbuild/sysbuild/
+images/ir_project_remote-prefix/src/ir_project_remote-stamp/ir_project_remote-build
+cmd.exe /C "cd /D E:\2.workspace\2.project\7.ACICT\2.sorce_code\ir_project_remote\build\ir_project_remote && C:\ncs\toolchains\0b393f9e1b\opt\bin\cmake.exe --build ."
+ninja: build stopped: subcommand failed.
+FATAL ERROR: command exited with status 1: 'C:\ncs\toolchains\0b393f9e1b\opt\bin\cmake.EXE' --build E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build
+
+ *  终端进程已终止，退出代码: 1。 
+ *  终端将被任务重用，按任意键关闭。 

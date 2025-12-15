@@ -16,6 +16,7 @@ target_sources(app PRIVATE
     src/driver/IRsend.cpp
     src/driver/IRutils.cpp
     # src/driver/IRrecv.cpp
+    src/driver/ir_hal.c
 )
 target_include_directories(app PRIVATE src/shim
     src/driver

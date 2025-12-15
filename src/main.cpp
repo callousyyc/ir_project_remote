@@ -3,6 +3,9 @@
 #include <ir_Panasonic.h> // 包含格力空调协议头文件
 #include <zephyr/kernel.h>
 
+// #include "IRsendNRF52.h"
+// IRsendNRF52 irsend;
+
 // 定义 GPIO 引脚号 (这里的数字仅用于 Shim 层 pinMode 占位，实际 PWM 在 driver
 // 中处理)
 const uint16_t kIrLed = 4;

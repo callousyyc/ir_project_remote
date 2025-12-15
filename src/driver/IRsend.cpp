@@ -15,10 +15,17 @@
 #endif
 // #include "IRtimer.h"
 
+#include "IRsend.h" // IRremoteESP8266 原始头文件
+#include <stdint.h>
+
+extern "C" {
+#include "ir_hal.h" // 你前面实现的 HAL
+}
+
 #include <zephyr/drivers/pwm.h>
 
 // 获取设备树定义的 PWM
-static const struct device *pwm_dev = DEVICE_DT_GET(DT_ALIAS(ir_pwm));
+// static const struct device *pwm_dev = DEVICE_DT_GET(DT_ALIAS(ir_pwm));
 // 假设使用通道 0
 #define PWM_CHANNEL 0
 
@@ -49,18 +56,22 @@ IRsend::IRsend(uint16_t IRsendPin, bool inverted, bool use_modulation)
 }
 
 void IRsend::begin() {
-  if (!device_is_ready(pwm_dev)) {
-    printk("Error: PWM device not ready\n");
-    return;
-  }
+  // if (!device_is_ready(pwm_dev)) {
+  //   printk("Error: PWM device not ready\n");
+  //   return;
+  // }
 
-  // 初始状态：关闭 PWM
-  pwm_set_cycles(pwm_dev, PWM_CHANNEL, 1000, 0, 0);
+  // // 初始状态：关闭 PWM
+  // pwm_set_cycles(pwm_dev, PWM_CHANNEL, 1000, 0, 0);
+
+  ir_hw_init();
 }
 
 void IRsend::enableIROut(uint32_t freq, uint8_t duty) {
-  ir_send_frequency = freq;
-  ir_send_duty_cycle = std::min(duty, kDutyMax);
+  // ir_send_frequency = freq;
+  // ir_send_duty_cycle = std::min(duty, kDutyMax);
+
+  ir_set_carrier_freq(freq, std::min(duty, kDutyMax));
 }
 
 // 核心功能：启用载波 (Mark)
@@ -76,26 +87,30 @@ void IRsend::mark(uint16_t timeMicroseconds) {
   // 更简单的做法是读取库中的 output_kHz 变量（如果有）或者直接计算
   // 原库通常使用 periodTime = (1000000 / frequency)
 
-  uint32_t frequency = ir_send_frequency;
-  uint32_t period_ns = 1000000000 / frequency;
-  uint32_t pulse_ns =
-      period_ns * ir_send_duty_cycle / 100; // 1/3 占空比 (标准红外)
+  // uint32_t frequency = ir_send_frequency;
+  // uint32_t period_ns = 1000000000 / frequency;
+  // uint32_t pulse_ns =
+  //     period_ns * ir_send_duty_cycle / 100; // 1/3 占空比 (标准红外)
 
-  // 启动 PWM
-  pwm_set(pwm_dev, PWM_CHANNEL, period_ns, pulse_ns, PWM_POLARITY_NORMAL);
+  // // 启动 PWM
+  // pwm_set(pwm_dev, PWM_CHANNEL, period_ns, pulse_ns, PWM_POLARITY_NORMAL);
 
-  // 保持指定时间
-  // 使用忙等待以保证时序精度 (us 级别)
-  k_busy_wait(timeMicroseconds);
+  // // 保持指定时间
+  // // 使用忙等待以保证时序精度 (us 级别)
+  // k_busy_wait(timeMicroseconds);
+
+  ir_mark(timeMicroseconds);
 }
 
 // 核心功能：关闭载波 (Space)
 void IRsend::space(uint32_t timeMicroseconds) {
   // 关闭 PWM (占空比设为 0)
-  pwm_set(pwm_dev, PWM_CHANNEL, 1000000000 / ir_send_frequency, 0,
-          PWM_POLARITY_NORMAL);
+  // pwm_set(pwm_dev, PWM_CHANNEL, 1000000000 / ir_send_frequency, 0,
+  //         PWM_POLARITY_NORMAL);
 
-  k_busy_wait(timeMicroseconds);
+  // k_busy_wait(timeMicroseconds);
+
+  ir_space(timeMicroseconds);
 }
 
 /// Generic method for sending data that is common to most protocols.
