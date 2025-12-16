@@ -1281,5 +1281,22 @@ zephyr_udc0: &usbd {
 &gpio0 {
     status = "okay";
 };
+
+&timer0 {
+    status = "okay";
+};
+
+&timer1 {
+    status = "okay";
+};
+
+&ppi {
+    status = "okay";
+};
+
+
+&gpiote {
+    status = "okay";
+};
 # 0 "<command-line>" 2
 # 1 "C:/ncs/v3.0.2/zephyr/misc/empty_file.c"

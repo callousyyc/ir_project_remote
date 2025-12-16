@@ -220,7 +220,7 @@
 		};
 		timer0: timer@40008000 {
 			compatible = "nordic,nrf-timer";
-			status = "disabled";
+			status = "okay";
 			reg = < 0x40008000 0x1000 >;
 			cc-num = < 0x4 >;
 			max-bit-width = < 0x20 >;
@@ -229,7 +229,7 @@
 		};
 		timer1: timer@40009000 {
 			compatible = "nordic,nrf-timer";
-			status = "disabled";
+			status = "okay";
 			reg = < 0x40009000 0x1000 >;
 			cc-num = < 0x4 >;
 			max-bit-width = < 0x20 >;

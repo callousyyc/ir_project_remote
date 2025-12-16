@@ -67,21 +67,39 @@ static void pwm_init(void) {
   // };
   // nrfx_pwm_init(&pwm, &cfg, NULL, NULL);
 
-  nrfx_pwm_config_t cfg = {.output_pins =
-                               {
-                                   NRF_GPIO_PIN_MAP(1, IR_GPIO_PIN), // ch0
-                                   NRF_PWM_PIN_NOT_CONNECTED,        // ch1
-                                   NRF_PWM_PIN_NOT_CONNECTED,        // ch2
-                                   NRF_PWM_PIN_NOT_CONNECTED         // ch3
-                               },
-                           .irq_priority = NRFX_PWM_DEFAULT_CONFIG_IRQ_PRIORITY,
-                           .base_clock = NRF_PWM_CLK_16MHz,
-                           .count_mode = NRF_PWM_MODE_UP,
-                           .top_value = PWM_COUNTERTOP, // 16MHz / 38kHz ≈ 421
-                           .load_mode = PWM_DECODER_LOAD_Common,
-                           .step_mode = NRF_PWM_STEP_AUTO};
+  // nrfx_pwm_config_t cfg = {.output_pins =
+  //                              {
+  //                                  NRF_GPIO_PIN_MAP(1, IR_GPIO_PIN), // ch0
+  //                                  NRF_PWM_PIN_NOT_CONNECTED,        // ch1
+  //                                  NRF_PWM_PIN_NOT_CONNECTED,        // ch2
+  //                                  NRF_PWM_PIN_NOT_CONNECTED         // ch3
+  //                              },
+  //                          .irq_priority =
+  //                          NRFX_PWM_DEFAULT_CONFIG_IRQ_PRIORITY, .base_clock
+  //                          = NRF_PWM_CLK_16MHz, .count_mode =
+  //                          NRF_PWM_MODE_UP, .top_value = PWM_COUNTERTOP, //
+  //                          16MHz / 38kHz ≈ 421 .load_mode =
+  //                          PWM_DECODER_LOAD_Common, .step_mode =
+  //                          NRF_PWM_STEP_AUTO};
 
-  nrfx_pwm_init(&pwm, &cfg, NULL, NULL);
+  // nrfx_err_t err = nrfx_pwm_init(&pwm, &cfg, NULL, NULL);
+
+#if defined(__ZEPHYR__)
+  // IRQ_CONNECT(NRFX_IRQ_NUMBER_GET(NRF_PWM_INST_GET(0)), IRQ_PRIO_LOWEST,
+  //             NRFX_PWM_INST_HANDLER_GET(0), 0, 0);
+#endif
+
+  nrfx_pwm_config_t config = NRFX_PWM_DEFAULT_CONFIG(
+      NRF_GPIO_PIN_MAP(1, IR_GPIO_PIN), NRF_PWM_PIN_NOT_CONNECTED,
+      NRF_PWM_PIN_NOT_CONNECTED, NRF_PWM_PIN_NOT_CONNECTED);
+  nrfx_err_t status = nrfx_pwm_init(&pwm, &config, NULL, &pwm);
+  // NRFX_ASSERT(status == NRFX_SUCCESS);
+  if (status != NRFX_SUCCESS) {
+    // 处理错误，例如记录日志或进入安全状态
+    printk("pwm_init status:0x%x\n", status);
+    return;
+  }
+
   /* 33% duty */
   pwm_seq_val = PWM_COUNTERTOP / 3;
   pwm_seq = (nrf_pwm_sequence_t){
@@ -90,6 +108,8 @@ static void pwm_init(void) {
       .repeats = 0,
       .end_delay = 0,
   };
+
+  nrfx_pwm_simple_playback(&pwm, &pwm_seq, 1, NRFX_PWM_FLAG_LOOP);
 }
 // static void timer_init(void) {
 //   // nrfx_timer_config_t cfg = NRFX_TIMER_DEFAULT_CONFIG;
@@ -108,6 +128,12 @@ static void pwm_init(void) {
 // }
 
 static void timer_init(void) {
+  nrfx_err_t status;
+
+#if defined(__ZEPHYR__)
+  IRQ_CONNECT(NRFX_IRQ_NUMBER_GET(NRF_TIMER_INST_GET(1)), IRQ_PRIO_LOWEST,
+              NRFX_TIMER_INST_HANDLER_GET(1), 0, 0);
+#endif
   // nrfx_timer_config_t cfg = {.frequency = NRF_TIMER_FREQ_1MHz,
   //                            .mode = NRF_TIMER_MODE_TIMER,
   //                            .bit_width = NRF_TIMER_BIT_WIDTH_32,
@@ -115,16 +141,24 @@ static void timer_init(void) {
   //                                NRFX_TIMER_DEFAULT_CONFIG_IRQ_PRIORITY,
   //                            .p_context = NULL};
 
-  nrfx_timer_config_t cfg = NRFX_TIMER_DEFAULT_CONFIG(NRF_TIMER_FREQ_1MHz);
+  // nrfx_timer_config_t cfg = NRFX_TIMER_DEFAULT_CONFIG(NRF_TIMER_FREQ_1MHz);
   // cfg.frequency = NRF_TIMER_FREQ_1MHz;
 
   // nrfx_timer_init(&timer, &cfg, timer_handler);
 
-  nrfx_err_t err = nrfx_timer_init(&timer, &cfg, timer_handler);
+  // nrfx_err_t err = nrfx_timer_init(&timer, &cfg, timer_handler);
   // __ASSERT(err == NRFX_SUCCESS, "timer init failed");
-  if (err != NRFX_SUCCESS) {
+
+  // nrfx_timer_t timer_t_inst = NRFX_TIMER_INSTANCE(TIMER_T_INST_IDX);
+  uint32_t base_frequency = NRF_TIMER_BASE_FREQUENCY_GET(timer.p_reg);
+  nrfx_timer_config_t config = NRFX_TIMER_DEFAULT_CONFIG(base_frequency);
+  config.bit_width = NRF_TIMER_BIT_WIDTH_32;
+  config.p_context = &timer;
+  status = nrfx_timer_init(&timer, &config, timer_handler);
+  // NRFX_ASSERT(status == NRFX_SUCCESS);
+  if (status != NRFX_SUCCESS) {
     // 处理错误，例如记录日志或进入安全状态
-    printk("timer_init err,0x%x\n", err);
+    printk("timer_init status:0x%x\n", status);
     return;
   }
 
@@ -132,9 +166,6 @@ static void timer_init(void) {
   nrfx_timer_enable(&timer);
 
   gpio_toggle_init();
-
-  // IRQ_CONNECT(TIMER1_IRQn, 7, nrfx_timer_1_irq_handler, NULL, 0);
-  // irq_enable(TIMER1_IRQn);
 }
 
 static void ppi_init(void) {
