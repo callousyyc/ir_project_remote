@@ -13,7 +13,7 @@
 #define IR_GPIO_PIN 11 /* P0.13 */
 /* 38kHz: 16MHz / 421 ≈ 38kHz */
 #define PWM_CLK_HZ 16000000UL
-#define IR_CARRIER_HZ 38000UL
+#define IR_CARRIER_HZ 36700UL
 #define PWM_COUNTERTOP (PWM_CLK_HZ / IR_CARRIER_HZ)
 static nrfx_pwm_t pwm = NRFX_PWM_INSTANCE(0);
 static nrfx_timer_t timer = NRFX_TIMER_INSTANCE(1);
@@ -92,6 +92,8 @@ static void pwm_init(void) {
   nrfx_pwm_config_t config = NRFX_PWM_DEFAULT_CONFIG(
       NRF_GPIO_PIN_MAP(1, IR_GPIO_PIN), NRF_PWM_PIN_NOT_CONNECTED,
       NRF_PWM_PIN_NOT_CONNECTED, NRF_PWM_PIN_NOT_CONNECTED);
+  config.top_value = PWM_COUNTERTOP;
+  config.base_clock = NRF_PWM_CLK_16MHz;
   nrfx_err_t status = nrfx_pwm_init(&pwm, &config, NULL, &pwm);
   // NRFX_ASSERT(status == NRFX_SUCCESS);
   if (status != NRFX_SUCCESS) {
@@ -101,7 +103,7 @@ static void pwm_init(void) {
   }
 
   /* 33% duty */
-  pwm_seq_val = PWM_COUNTERTOP / 3;
+  pwm_seq_val = PWM_COUNTERTOP / 2;
   pwm_seq = (nrf_pwm_sequence_t){
       .values.p_common = &pwm_seq_val,
       .length = 1,
@@ -162,7 +164,7 @@ static void timer_init(void) {
     return;
   }
 
-  nrfx_timer_clear(&timer);
+  // nrfx_timer_clear(&timer);
   nrfx_timer_enable(&timer);
 
   gpio_toggle_init();
@@ -225,7 +227,15 @@ void ir_set_carrier_freq(uint32_t hz, uint8_t duty_percent) {
                            .load_mode = PWM_DECODER_LOAD_Common,
                            .step_mode = NRF_PWM_STEP_AUTO};
 
-  nrfx_pwm_init(&pwm, &cfg, NULL, NULL);
+  // nrfx_pwm_init(&pwm, &cfg, NULL, NULL);
+
+  nrfx_err_t status = nrfx_pwm_init(&pwm, &cfg, NULL, NULL);
+  // NRFX_ASSERT(status == NRFX_SUCCESS);
+  if (status != NRFX_SUCCESS) {
+    // 处理错误，例如记录日志或进入安全状态
+    printk("pwm_init status:0x%x\n", status);
+    return;
+  }
 
   /* 33% duty */
   pwm_seq_val = new_duty;

@@ -71,7 +71,7 @@ void IRsend::enableIROut(uint32_t freq, uint8_t duty) {
   // ir_send_frequency = freq;
   // ir_send_duty_cycle = std::min(duty, kDutyMax);
 
-  ir_set_carrier_freq(freq, std::min(duty, kDutyMax));
+  // ir_set_carrier_freq(freq, std::min(duty, kDutyMax));
 }
 
 // 核心功能：启用载波 (Mark)

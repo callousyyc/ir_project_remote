@@ -94,11 +94,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/drivers/pwm/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
   include("E:/2.workspace/2.project/7.ACICT/2.sorce_code/ir_project_remote/build/ir_project_remote/zephyr/drivers/serial/cmake_install.cmake")
 endif()
 
