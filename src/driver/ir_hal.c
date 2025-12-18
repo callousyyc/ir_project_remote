@@ -186,7 +186,10 @@ void ir_hw_init(void) {
 void ir_mark(uint32_t us) {
   k_sem_reset(&timer_sem);
   nrfx_timer_clear(&timer);
-  nrfx_timer_compare(&timer, NRF_TIMER_CC_CHANNEL0, us, true);
+
+  uint32_t ticks = nrfx_timer_us_to_ticks(&timer, us);
+  /* 设置定时器比较值 */
+  nrfx_timer_compare(&timer, NRF_TIMER_CC_CHANNEL0, ticks, true);
   /* COMPARE → PWM STOP */
   nrfx_ppi_channel_enable(ppi_stop_ch);
   /* 立即启动载波 */
@@ -200,7 +203,10 @@ void ir_space(uint32_t us) {
   k_sem_reset(&timer_sem);
   nrfx_pwm_stop(&pwm, false);
   nrfx_timer_clear(&timer);
-  nrfx_timer_compare(&timer, NRF_TIMER_CC_CHANNEL0, us, true);
+
+  uint32_t ticks = nrfx_timer_us_to_ticks(&timer, us);
+  /* 设置定时器比较值 */
+  nrfx_timer_compare(&timer, NRF_TIMER_CC_CHANNEL0, ticks, true);
   nrfx_timer_resume(&timer);
   k_sem_take(&timer_sem, K_FOREVER);
 }
