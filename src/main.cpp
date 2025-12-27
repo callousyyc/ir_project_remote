@@ -1,6 +1,7 @@
 #include "shim/Arduino.h"
 #include <IRsend.h>
-#include <ir_Panasonic.h> // 包含格力空调协议头文件
+// #include <ir_Panasonic.h> // 包含格力空调协议头文件
+#include <ir_Haier.h> // 包含海尔空调协议头文件
 #include <zephyr/kernel.h>
 
 // #include "IRsendNRF52.h"
@@ -12,7 +13,7 @@ const uint16_t kIrLed = 4;
 
 // 实例化对象
 IRsend irsend(kIrLed);
-IRPanasonicAc ac(kIrLed); // 实例化松下空调对象
+IRHaierAC ac(kIrLed); // 实例化松下空调对象
 
 int main(void) {
   printk("Starting IR Remote for nRF52840...\n");
@@ -23,11 +24,11 @@ int main(void) {
 
   // 设置空调参数
   printk("Setting up AC...\n");
-  ac.on();
-  ac.setMode(kPanasonicAcCool);
+  // ac.on();
+  ac.setMode(kHaierAcCool);
   ac.setTemp(26);
-  ac.setFan(kPanasonicAcFanAuto);
-  ac.setSwingVertical(kPanasonicAcSwingVAuto);
+  ac.setFan(kHaierAcFanLow);
+  // ac.setSwingVertical(kHaierAcSwingVAuto);
 
   while (1) {
     printk("Sending IR Code: Cool 26C\n");

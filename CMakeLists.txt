@@ -12,7 +12,8 @@ target_sources(app PRIVATE
     src/main.cpp
     # src/driver/ZephyrIRReceiver.cpp
     # src/driver/ZephyrIRSender.cpp
-    src/protocols/ir_Panasonic.cpp
+    # src/protocols/ir_Panasonic.cpp
+    src/protocols/ir_Haier.cpp
     src/driver/IRsend.cpp
     src/driver/IRutils.cpp
     # src/driver/IRrecv.cpp

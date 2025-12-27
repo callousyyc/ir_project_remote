@@ -13,7 +13,7 @@
 #define IR_GPIO_PIN 11 /* P0.13 */
 /* 38kHz: 16MHz / 421 ≈ 38kHz */
 #define PWM_CLK_HZ 16000000UL
-#define IR_CARRIER_HZ 36700UL
+#define IR_CARRIER_HZ 38000UL
 #define PWM_COUNTERTOP (PWM_CLK_HZ / IR_CARRIER_HZ)
 static nrfx_pwm_t pwm = NRFX_PWM_INSTANCE(0);
 static nrfx_timer_t timer = NRFX_TIMER_INSTANCE(1);
